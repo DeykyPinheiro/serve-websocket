@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "ws": "^8.17.0"
+  },
+  "devDependencies": {
+    "@types/ioredis": "^5.0.0",
+    "@types/node": "^20.12.8"
   }
 }

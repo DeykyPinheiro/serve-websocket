@@ -1,23 +1,16 @@
 import * as WebSocket from 'ws';
+import { subscribeChannel } from './services/RedisService';
 
-// Crie um servidor WebSocket
+const channelName = 'PaperData';
+
+
 const server = new WebSocket.Server({ port: 3000 });
 
-// Evento de conexão WebSocket
-server.on('connection', (ws: WebSocket) => {
-    console.log('Cliente conectado.');
-
-    // Evento de mensagem recebida
-    ws.on('message', (message: string) => {
-        console.log(`Mensagem recebida: ${message}`);
-
-        // Envie a mensagem de volta para o cliente
-        ws.send(`Você disse: ${message}`);
-    });
-
-    // Evento de fechamento de conexão
-    ws.on('close', () => {
-        console.log('Conexão fechada.');
+subscribeChannel(channelName, (message: string) => {
+    server.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(message);
+        }
     });
 });
 
